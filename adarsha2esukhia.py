@@ -9,31 +9,13 @@ workBase = 'https://adarsha.dharma-treasure.org/kdbs/{name}'
 apiBase = 'https://adarsha.dharma-treasure.org/api/kdbs/{name}/pbs?size=100&lastId={pbs}'
 
 
-def item_generator(things):
-    # ...because writelines() is such a tease
-    for item in things:
-        yield item
-        yield '\n'
-
-def writePage(page):
-    lines = extractLines(page)
-    formatedLines = formatLines(lines)
-
-    fileName = "{:0>3d}".format(formatedLines.pop(0))
-
-    with open(f'{outdir}{fileName}.txt', 'a+', encoding='utf-8') as file:
-        file.writelines(item_generator(formatedLines))
-
 def formatLines(lines):
     formatedLines = []
-
     volume = lines.pop(0)
     formatedLines.append(volume)
-
     page = lines.pop(0)
     side = lines.pop(0)
     formatedLines.append(f'[{page}{side}]')
-
     i = 1
     for line in lines:
         formatedLines.append(f'[{page}{side}.{i}]{line}')
@@ -53,8 +35,23 @@ def extractLines(page):
     text = re.sub('\s+', ' ', text)
     ls = list(filter(None, text.split('\\n')))
     lines += ls
-
     return lines
+
+def item_generator(things):
+    # ...because writelines() is such a tease
+    for item in things:
+        yield item
+        yield '\n'
+
+def writePage(page):
+    lines = extractLines(page)
+    formatedLines = formatLines(lines)
+
+    fileName = "{:0>3d}".format(formatedLines.pop(0))
+
+    with open(f'{outdir}{fileName}.txt', 'a+', encoding='utf-8') as file:
+        file.writelines(item_generator(formatedLines))
+
 
 def testUrl(work, pbs):
     # check if url has text
@@ -79,7 +76,6 @@ def getwork(work):
 
         for page in pages:
             writePage(page)
-
         print(f'pbs: {i}')
         i += 100
 
