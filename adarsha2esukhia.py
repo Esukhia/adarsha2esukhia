@@ -8,10 +8,6 @@ base = 'https://adarsha.dharma-treasure.org/'
 workBase = 'https://adarsha.dharma-treasure.org/kdbs/{name}'
 apiBase = 'https://adarsha.dharma-treasure.org/api/kdbs/{name}/pbs?size=100&lastId={pbs}'
 
-# [work, starting pbs]
-work = ['degetengyur', 2308063]
-# work = ['mipam', 1489993]
-# work = ['jiangkangyur', 2561410]
 
 outdir = f'adarsha/{work[0]}/'
 if not os.path.exists(outdir):
@@ -19,7 +15,7 @@ if not os.path.exists(outdir):
 
 
 def item_generator(things):
-    # because writelines() is such a tease
+    # ...because writelines() is such a tease
     for item in things:
         yield item
         yield '\n'
@@ -93,6 +89,11 @@ def getwork(work=work):
         i += 100
 
 if __name__ == '__main__':
+
+    # [work, starting pbs]
+    # work = ['degetengyur', 2308063]
+    work = ['mipam', 1489993]
+    # work = ['jiangkangyur', 2561410]
 
     getwork()
     
