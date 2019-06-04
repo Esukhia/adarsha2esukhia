@@ -9,7 +9,6 @@ workBase = 'https://adarsha.dharma-treasure.org/kdbs/{name}'
 apiBase = 'https://adarsha.dharma-treasure.org/api/kdbs/{name}/pbs?size=100&lastId={pbs}'
 
 
-
 def item_generator(things):
     # ...because writelines() is such a tease
     for item in things:
@@ -62,7 +61,7 @@ def testUrl(work, pbs):
     url = apiBase.format(name=work[0], pbs=pbs)
     response = requests.get(url)
     if response.text == '{"total":0,"data":[]}':
-        print(response.text)
+        # print(response.text)
         status = False
     else:
         status = True
@@ -87,9 +86,9 @@ def getwork(work):
 if __name__ == '__main__':
 
     # [work, starting pbs]
-    # work = ['degetengyur', 2308063]
+    work = ['degetengyur', 2308063]
     # work = ['mipam', 1489993]
-    work = ['jiangkangyur', 2561410]
+    # work = ['jiangkangyur', 2561410]
 
     outdir = f'output/{work[0]}/'
     if not os.path.exists(outdir):
