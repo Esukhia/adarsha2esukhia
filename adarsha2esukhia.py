@@ -9,10 +9,6 @@ workBase = 'https://adarsha.dharma-treasure.org/kdbs/{name}'
 apiBase = 'https://adarsha.dharma-treasure.org/api/kdbs/{name}/pbs?size=100&lastId={pbs}'
 
 
-outdir = f'adarsha/{work[0]}/'
-if not os.path.exists(outdir):
-    os.mkdir(outdir)
-
 
 def item_generator(things):
     # ...because writelines() is such a tease
@@ -72,7 +68,7 @@ def testUrl(work, pbs):
         status = True
     return status
 
-def getwork(work=work):
+def getwork(work):
     # put the work in a json
     i = work[1]
     # Empty file if already existing
@@ -92,10 +88,14 @@ if __name__ == '__main__':
 
     # [work, starting pbs]
     # work = ['degetengyur', 2308063]
-    work = ['mipam', 1489993]
-    # work = ['jiangkangyur', 2561410]
+    # work = ['mipam', 1489993]
+    work = ['jiangkangyur', 2561410]
 
-    getwork()
+    outdir = f'output/{work[0]}/'
+    if not os.path.exists(outdir):
+        os.makedirs(outdir)
+
+    getwork(work)
     
     print('Done!')
 
