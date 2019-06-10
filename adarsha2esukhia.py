@@ -9,6 +9,27 @@ workBase = 'https://adarsha.dharma-treasure.org/kdbs/{name}'
 apiBase = 'https://adarsha.dharma-treasure.org/api/kdbs/{name}/pbs?size=100&lastId={pbs}'
 
 
+def findMissing(counters, formatedLines, fileName):
+    page = formatedLines[0][1:-1]
+    if page == '1a':
+        counters[1] = 1
+    elif page == '1b':
+        counters[1] = 2
+    number = int(page[:-1]) * 2
+    if page[-1] == 'a':
+        number -= 1
+    if page[-1] == 'c':
+        counters[1] -= 1
+    if page[-1] == 'd':
+        counters[1] -= 1
+    counters[0] = number
+    if counters[0] != counters[1]:
+        with open(f'{outdir}report.txt', 'a+', encoding='utf-8') as file:
+            file.writelines(f'missing: {fileName} {page} + 1\n')      
+        counters[1] -= 1
+    counters[1] += 1
+    return counters
+
 def formatLines(lines):
     formatedLines = []
     volume = lines.pop(0)
@@ -49,6 +70,8 @@ def writePage(page):
 
     fileName = "{:0>3d}".format(formatedLines.pop(0))
 
+    findMissing(counters, formatedLines, fileName)
+
     with open(f'{outdir}{fileName}.txt', 'a+', encoding='utf-8') as file:
         file.writelines(item_generator(formatedLines))
 
@@ -83,12 +106,16 @@ if __name__ == '__main__':
 
     # [work, starting pbs]
     work = ['degetengyur', 2308063]
+    # work = ['degetengyur', 2399963]
     # work = ['mipam', 1489993]
     # work = ['jiangkangyur', 2561410]
 
-    outdir = f'output/{work[0]}/'
-    if not os.path.exists(outdir):
-        os.makedirs(outdir)
+    counters = [0, 0]
+
+    outdir = f'output/{work[0]}/'    
+    if os.path.exists(outdir):
+        shutil.rmtree(outdir, ignore_errors=True)
+    os.makedirs(outdir)
 
     getwork(work)
     
