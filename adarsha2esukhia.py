@@ -112,9 +112,7 @@ def normalizeUni(strNFC):
     return strNFC
 
 def getwork(work):
-    # put the work in a json
     i = work[1]
-    # Empty file if already existing
     while testUrl(work, i):
         url = apiBase.format(name=work[0], pbs=i)
         response = requests.get(url)
